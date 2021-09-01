@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">NewMyWeaterProject</string>
+    <string name="app_name">Погода</string>
+    <string name="button">Обновить</string>
+    <string name="temperature_title">Температура</string>
+    <string name="feelsLike_title">Ощущается как</string>
+    <string name="error">Ошибка</string>
+    <string name="reload">Перезагрузить</string>
+    <string name="lat">Широта:</string>
+    <string name="lon">Долгота:</string>
 </resources>

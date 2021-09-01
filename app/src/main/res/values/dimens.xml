@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="tv_padding">8dp</dimen>
+    <dimen name="tv_big_title">36sp</dimen>
+    <dimen name="tv_small_title">18sp</dimen>
+</resources>
