@@ -1,14 +1,20 @@
-package com.example.newmyweaterproject
+package com.example.newmyweaterproject.ui.main.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.newmyweaterproject.ui.main.MainFragment
+import androidx.appcompat.app.AppCompatActivity
+import com.example.newmyweaterproject.R
+import com.example.newmyweaterproject.databinding.MainActivityBinding
+
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: MainActivityBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        binding = MainActivityBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity)
+        setContentView(binding.root)
+
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, MainFragment.newInstance())
