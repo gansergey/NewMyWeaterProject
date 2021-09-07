@@ -23,11 +23,13 @@ class MainFragment : Fragment() {
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var adapter: MainAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         //Изменяем для binding
         val view = inflater.inflate(R.layout.main_fragment, container, false)
         _binding = MainFragmentBinding.bind(view)
@@ -37,6 +39,27 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        adapter = MainAdapter()
+
+        adapter.listener =
+            MainAdapter.OnItemViewClickListener { weather ->
+                val manager = activity?.supportFragmentManager
+                if (manager != null) {
+                    val bundle = Bundle()
+                    bundle.putParcelable(DetailsFragment.WEATHER_EXTRA, weather)
+                    manager.beginTransaction()
+                        .replace(R.id.container, DetailsFragment.newInstance(bundle))
+                        .addToBackStack("")
+                        .commit()
+                }
+            }
+
+        binding.recyclerView.adapter = adapter
+        binding.mainFragmentFab.setOnClickListener {
+            viewModel.onLanguageChange()
+        }
+
+
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         //В этом методе мы подписываемся на изменения. Будем класть наш текст в LiveData
@@ -44,7 +67,15 @@ class MainFragment : Fragment() {
             renderData(state)
         })
 
-        viewModel.getWeatherFromLocalSource()
+        //Подписываемся на изменения переключения стран
+        viewModel.liveDataIsRus.observe(viewLifecycleOwner, { isRus ->
+            if (isRus) {
+                binding.mainFragmentFab.setImageResource(R.drawable.ic_russia)
+            } else {
+                binding.mainFragmentFab.setImageResource(R.drawable.ic_world)
+            }
+            viewModel.getWeatherFromLocalSource()
+        })
     }
 
     @SuppressLint("SetTextI18n")
@@ -53,23 +84,22 @@ class MainFragment : Fragment() {
             is AppState.Loading -> binding.loadingLayout.visibility = View.VISIBLE
             is AppState.Success -> {
                 binding.loadingLayout.visibility = View.GONE
-                binding.tvCity.text = state.weather.city.name
-                binding.tvLatLon.text = "${getString(R.string.lat)} ${state.weather.city.lat}, " +
-                        "${getString(R.string.lon)} ${state.weather.city.lon}"
-                binding.tvTemperature.text = "${state.weather.temperature}"
-                binding.tvFeelsLike.text = "${state.weather.feelsLike}"
+                adapter.weatherData = state.weather
             }
             is AppState.Error -> {
                 binding.loadingLayout.visibility = View.GONE
                 Snackbar
-                    .make(binding.main, getString(R.string.error), Snackbar.LENGTH_INDEFINITE)
-                    .setAction(getString(R.string.reload)) { viewModel.getWeatherFromLocalSource() }
-                    .show()
+                    .make(
+                        binding.mainFragmentFab,
+                        getString(R.string.error),
+                        Snackbar.LENGTH_INDEFINITE
+                    )
+                    .setAction(getString(R.string.reload)) {
+                        viewModel.getWeatherFromLocalSource()
+                    }.show()
             }
         }
-        binding.button.setOnClickListener {
-            viewModel.getWeatherFromLocalSource()
-        }
+
     }
 
     //для binding

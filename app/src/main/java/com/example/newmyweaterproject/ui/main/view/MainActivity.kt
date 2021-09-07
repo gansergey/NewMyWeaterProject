@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.newmyweaterproject.R
 import com.example.newmyweaterproject.databinding.MainActivityBinding
 
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: MainActivityBinding

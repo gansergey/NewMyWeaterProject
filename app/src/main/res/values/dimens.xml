@@ -3,4 +3,7 @@
     <dimen name="tv_padding">8dp</dimen>
     <dimen name="tv_big_title">36sp</dimen>
     <dimen name="tv_small_title">18sp</dimen>
+    <dimen name="tv_item_recycler_view_padding">18dp</dimen>
+    <dimen name="margin_fab_button">16dp</dimen>
+    <dimen name="max_image_size_fub_button">56dp</dimen>
 </resources>
