@@ -39,17 +39,19 @@ class DetailsFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val weather = arguments?.getParcelable<Weather>(WEATHER_EXTRA)
-
-        if (weather != null) {
-            binding.tvCity.text = weather.city.name
-            binding.tvLatLon.text = "${getString(R.string.lat)} ${weather.city.lat}, " +
-                    "${getString(R.string.lon)} ${weather.city.lon}"
-            binding.tvTemperature.text = "${weather.temperature}"
-            binding.tvFeelsLike.text = "${weather.feelsLike}"
+        arguments?.getParcelable<Weather>(WEATHER_EXTRA)?.let {
+            with(binding) {
+                it.city.also { city ->
+                    tvCity.text = city.name
+                    tvLatLon.text = "${getString(R.string.lat)} ${city.lat}, " +
+                            "${getString(R.string.lon)} ${city.lon}"
+                }
+                tvTemperature.text = it.temperature.toString()
+                tvFeelsLike.text = it.feelsLike.toString()
+            }
         }
     }
+
     //для binding
     override fun onDestroyView() {
         super.onDestroyView()
