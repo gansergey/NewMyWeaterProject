@@ -52,26 +52,31 @@ class MainFragment : Fragment() {
             }
         }
 
-        binding.recyclerView.adapter = adapter
-        binding.mainFragmentFab.setOnClickListener {
-            viewModel.onLanguageChange()
+        with(binding) {
+            recyclerView.adapter = adapter
+            mainFragmentFab.setOnClickListener {
+                viewModel.onLanguageChange()
+            }
         }
 
+        with(viewModel) {
+            //В этом методе мы подписываемся на изменения. Будем класть наш текст в LiveData
+            liveData.observe(viewLifecycleOwner, { state: AppState ->
+                renderData(state)
+            })
 
-        //В этом методе мы подписываемся на изменения. Будем класть наш текст в LiveData
-        viewModel.liveData.observe(viewLifecycleOwner, { state: AppState ->
-            renderData(state)
-        })
-
-        //Подписываемся на изменения переключения стран
-        viewModel.liveDataIsRus.observe(viewLifecycleOwner, { isRus ->
-            if (isRus) {
-                binding.mainFragmentFab.setImageResource(R.drawable.ic_russia)
-            } else {
-                binding.mainFragmentFab.setImageResource(R.drawable.ic_world)
-            }
-            viewModel.getWeatherFromLocalSource()
-        })
+            //Подписываемся на изменения переключения стран
+            liveDataIsRus.observe(viewLifecycleOwner, { isRus ->
+                with(binding) {
+                    if (isRus) {
+                        mainFragmentFab.setImageResource(R.drawable.ic_russia)
+                    } else {
+                        mainFragmentFab.setImageResource(R.drawable.ic_world)
+                    }
+                }
+                getWeatherFromLocalSource()
+            })
+        }
     }
 
     @SuppressLint("SetTextI18n")
