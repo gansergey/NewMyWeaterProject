@@ -9,4 +9,7 @@
     <string name="lon">Долгота:</string>
     <string name="test_city">Москва</string>
     <string name="change_list_city">TODO</string>
+    <string name="warning_massage_internet">Внимание!</string>
+    <string name="massage_internet">Подключение к интернету отсутствует</string>
+    <string name="massage_internet_connect">Подключение к интернету восстановленно</string>
 </resources>
