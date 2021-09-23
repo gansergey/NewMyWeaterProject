@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainDetail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:gravity="top"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/img_weather_height"
+            android:padding="@dimen/img_padding" />
+
+        <TextView
+            android:id="@+id/tv_city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/app_name"
+            android:padding="@dimen/tv_padding"
+            android:textAlignment="center"
+            android:textSize="@dimen/tv_big_title"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_lat_lon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/app_name"
+            android:padding="@dimen/tv_padding"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/tv_temperature_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/app_name"
+            android:padding="@dimen/tv_padding"
+            android:text="@string/temperature_title"
+            android:textAlignment="center"
+            android:textSize="@dimen/tv_small_title"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_temperature"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/app_name"
+            android:padding="@dimen/tv_padding"
+            android:textAlignment="center"
+            android:textSize="@dimen/tv_big_title" />
+
+        <TextView
+            android:id="@+id/tv_feelsLike_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/app_name"
+            android:padding="@dimen/tv_padding"
+            android:text="@string/feelsLike_title"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_feelsLike"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/app_name"
+            android:padding="@dimen/tv_padding"
+            android:textAlignment="center"
+            android:textSize="@dimen/tv_big_title" />
+
+        <TextView
+            android:id="@+id/tv_condition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/app_name"
+            android:padding="@dimen/tv_padding"
+            android:textAlignment="center"
+            android:textSize="@dimen/tv_small_title" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <FrameLayout
+        android:id="@+id/loadingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:visibility="gone"
+        tools:visibility="invisible">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+</FrameLayout>

@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">NewMyWeaterProject</string>
+    <string name="app_name">Погода</string>
+    <string name="button">Обновить</string>
+    <string name="temperature_title">Температура</string>
+    <string name="feelsLike_title">Ощущается как</string>
+    <string name="error">Ошибка</string>
+    <string name="reload">Перезагрузить</string>
+    <string name="lat">Широта:</string>
+    <string name="lon">Долгота:</string>
+    <string name="test_city">Москва</string>
+    <string name="change_list_city">TODO</string>
+    <string name="warning_massage_internet">Внимание!</string>
+    <string name="massage_internet">Подключение к интернету отсутствует</string>
+    <string name="massage_internet_connect">Подключение к интернету восстановленно</string>
 </resources>
