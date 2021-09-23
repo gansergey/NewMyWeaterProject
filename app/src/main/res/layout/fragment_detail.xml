@@ -9,9 +9,15 @@
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:gravity="center"
+
+        android:gravity="top"
         android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/img_weather_height"
+            android:padding="@dimen/img_padding" />
 
         <TextView
             android:id="@+id/tv_city"
@@ -70,6 +76,15 @@
             android:padding="@dimen/tv_padding"
             android:textAlignment="center"
             android:textSize="@dimen/tv_big_title" />
+
+        <TextView
+            android:id="@+id/tv_condition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/app_name"
+            android:padding="@dimen/tv_padding"
+            android:textAlignment="center"
+            android:textSize="@dimen/tv_small_title" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

@@ -26,17 +26,15 @@ class MainViewModel : ViewModel() {
 
     private fun getDataFromLocalSource() {
         liveDataToObserve.value = AppState.Loading
-        Thread {
-            sleep(3000)
+        sleep(1000)
 
-            //postValue Делается из другого потока
-            liveDataToObserve.postValue(
-                if (liveDataIsRusToObserve.value == true) {
-                    AppState.Success(repository.getWeatherFromLocalStorageRus())
-                } else {
-                    AppState.Success(repository.getWeatherFromLocalStorageWorld())
-                }
-            )
-        }.start()
+        //postValue Делается из другого потока
+        liveDataToObserve.postValue(
+            if (liveDataIsRusToObserve.value == true) {
+                AppState.Success(repository.getWeatherFromLocalStorageRus())
+            } else {
+                AppState.Success(repository.getWeatherFromLocalStorageWorld())
+            }
+        )
     }
 }

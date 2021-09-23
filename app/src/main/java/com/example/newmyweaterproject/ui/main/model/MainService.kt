@@ -4,6 +4,7 @@ import android.app.IntentService
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.newmyweaterproject.BuildConfig
@@ -82,7 +83,7 @@ class MainService(name: String = "MainService") : IntentService(name) {
     }
 
     private fun onMalformedURL() {
-        TODO("Not yet implemented")
+        Toast.makeText(this,"Unable to get the link",Toast.LENGTH_SHORT).show();
     }
 
     private fun onResponse(weatherDTO: WeatherDTO) {

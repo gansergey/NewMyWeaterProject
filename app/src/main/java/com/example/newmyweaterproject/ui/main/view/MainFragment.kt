@@ -44,7 +44,7 @@ class MainFragment : Fragment() {
         adapter.listener = MainAdapter.OnItemViewClickListener { weather ->
             activity?.supportFragmentManager?.apply {
                 beginTransaction()
-                    .add(R.id.container, DetailsFragment.newInstance(Bundle().apply {
+                    .replace(R.id.container, DetailsFragment.newInstance(Bundle().apply {
                         putParcelable(DetailsFragment.WEATHER_EXTRA, weather)
                     }))
                     .addToBackStack("")

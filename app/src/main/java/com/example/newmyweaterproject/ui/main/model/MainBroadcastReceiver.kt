@@ -29,21 +29,8 @@ class MainBroadcastReceiver : BroadcastReceiver() {
     private fun hasConnection(context: Context): Boolean {
 
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-        var state = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-
-        if (state != null && state.isConnected) {
-            return true
-        }
-
-        state = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
-
-        if (state != null && state.isConnected) {
-            return true
-        }
-
-        state = cm.activeNetworkInfo
-        return state != null && state.isConnected
+        val networkInfo = cm.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
     }
 
 }

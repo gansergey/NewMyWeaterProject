@@ -1,10 +1,6 @@
 package com.example.newmyweaterproject.ui.main.view
 
 import android.annotation.SuppressLint
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,10 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.lifecycle.ViewModelProvider
+import coil.api.load
 import com.example.newmyweaterproject.R
 import com.example.newmyweaterproject.databinding.FragmentDetailBinding
-import com.example.newmyweaterproject.ui.main.model.*
+import com.example.newmyweaterproject.ui.main.model.Weather
+import com.example.newmyweaterproject.ui.main.model.WeatherDTO
+import com.example.newmyweaterproject.ui.main.viewmodel.AppState
+import com.example.newmyweaterproject.ui.main.viewmodel.DetailViewModel
 
 class DetailsFragment : Fragment() {
 
@@ -28,38 +28,12 @@ class DetailsFragment : Fragment() {
         }
     }
 
+    private val viewModel: DetailViewModel by lazy {
+        ViewModelProvider(this).get(DetailViewModel::class.java)
+    }
+
     private var _binding: FragmentDetailBinding? = null
     private val binding get() = _binding!!
-
-    private val localResultBroadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            when (intent?.getStringExtra(RESULT_EXTRA)) {
-                SUCCESS_RESULT -> {
-                    intent.getParcelableExtra<WeatherDTO.FactDTO>(FACT_WEATHER_EXTRA)?.let {
-                        displayWeather(it)
-                    }
-                }
-                else -> {
-                    binding.mainDetail.showSnackBar("Error","Try again",{ view ->
-                    })
-                }
-
-            }
-        }
-
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        LocalBroadcastManager.getInstance(requireContext())
-            .registerReceiver(localResultBroadcastReceiver, IntentFilter(DETAILS_INTENT_FILTER))
-    }
-
-    override fun onDestroy() {
-        LocalBroadcastManager.getInstance(requireContext())
-            .unregisterReceiver(localResultBroadcastReceiver)
-        super.onDestroy()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,56 +49,49 @@ class DetailsFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.getParcelable<Weather>(WEATHER_EXTRA)?.let {
-            with(binding) {
-                it.city.also { city ->
-                    tvCity.text = city.name
-                    tvLatLon.text = "${getString(R.string.lat)} ${city.lat}, " +
-                            "${getString(R.string.lon)} ${city.lon}"
+        val weather = arguments?.getParcelable(WEATHER_EXTRA) ?: Weather()
 
-                    getWeather(city.lat, city.lon)
-
-//                    WeatherLoader(
-//                        city.lat,
-//                        city.lon,
-//                        object : WeatherLoader.WeatherLoaderListener {
-//                            override fun onLoaded(weatherDTO: WeatherDTO) {
-//                                requireActivity().runOnUiThread {
-//                                    displayWeather(weatherDTO)
-//                                }
-//                            }
-//
-//                            override fun onFailed(throwable: Exception) {
-//                                requireActivity().runOnUiThread {
-//                                    Toast.makeText(
-//                                        requireContext(),
-//                                        throwable.localizedMessage,
-//                                        Toast.LENGTH_LONG
-//                                    ).show()
-//                                }
-//                            }
-//
-//                        }).goToInternet()
-                }
-            }
-
+        viewModel.liveData.observe(viewLifecycleOwner) { state ->
+            renderData(state)
         }
+
+        viewModel.getWeatherFromRemoteSource(weather)
     }
 
-    private fun getWeather(lat: Double, lon: Double) {
-        //binding.loadingLayout.showOrHide(false)
-        requireActivity().startService(Intent(requireContext(), MainService::class.java).apply {
-            putExtra(LAT_EXTRA, lat)
-            putExtra(LON_EXTRA, lon)
-        })
-    }
+    @SuppressLint("SetTextI18n")
+    private fun renderData(state: AppState) {
 
-    private fun displayWeather(weather: WeatherDTO.FactDTO) {
-        with(binding) {
-            weather.also {
-                //loadingLayout.showOrHide(true)
-                tvTemperature.text = weather.temp.toString()
-                tvFeelsLike.text = weather.feels_like.toString()
+        when (state) {
+            is AppState.Loading -> binding.loadingLayout.showOrHide(true)
+            is AppState.Success -> {
+                val weather = state.weather.first()
+                with(binding) {
+                    loadingLayout.showOrHide(false)
+
+                    val condition = weather.condition.toString()
+
+                    tvTemperature.text = weather.temperature.toString()
+                    tvFeelsLike.text = weather.feelsLike.toString()
+                    tvCondition.text = condition
+
+                    tvCity.text = weather.city.name
+                    tvLatLon.text = "${getString(R.string.lat)} ${weather.city.lat}, " +
+                            "${getString(R.string.lon)} ${weather.city.lon}"
+
+                    getImageWeather(condition)
+                }
+
+            }
+            is AppState.Error -> {
+
+                with(binding) {
+                    loadingLayout.showOrHide(false)
+                    mainDetail.showSnackBar(
+                        getString(R.string.error),
+                        getString(R.string.reload),
+                        { viewModel.getWeatherFromRemoteSource(Weather()) }
+                    )
+                }
             }
         }
     }
@@ -134,5 +101,58 @@ class DetailsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    private fun getImageWeather(condition: String){
+
+        when (condition) {
+            //ясно
+            "clear" -> loadImageWeather("https://cdn-icons-png.flaticon.com/512/890/890347.png")
+            //малооблачно
+            "partly-cloudy" -> loadImageWeather("https://cdn-icons-png.flaticon.com/512/3208/3208752.png")
+            // облачно с прояснениями
+            "cloudy" -> loadImageWeather("https://cdn-icons-png.flaticon.com/512/3208/3208752.png")
+            //пасмурно
+            "overcast" -> loadImageWeather("https://cdn-icons-png.flaticon.com/512/2676/2676023.png")
+            //морось
+            "drizzle" -> loadImageWeather("https://cdn-icons-png.flaticon.com/512/3520/3520675.png")
+            //небольшой дождь
+            "light-rain" -> loadImageWeather("https://cdn-icons-png.flaticon.com/512/3520/3520675.png")
+            //дождь
+            "rain" -> loadImageWeather("https://cdn-icons-png.flaticon.com/512/3520/3520675.png")
+            //умеренно сильный дождь
+            "moderate-rain" -> loadImageWeather("https://cdn-icons-png.flaticon.com/512/3520/3520675.png")
+            //сильный дождь
+            "heavy-rain" -> loadImageWeather("https://cdn-icons-png.flaticon.com/512/3520/3520675.png")
+            //длительный сильный дождь
+            "continuous-heavy-rain" -> loadImageWeather("https://cdn-icons-png.flaticon.com/512/3520/3520675.png")
+            // ливень
+            "showers" -> loadImageWeather("https://cdn-icons-png.flaticon.com/512/3520/3520675.png")
+            // дождь со снегом
+            "wet-snow" -> loadImageWeather("https://cdn-icons-png.flaticon.com/512/1164/1164956.png")
+            // небольшой снег
+            "light-snow" -> loadImageWeather("https://cdn-icons-png.flaticon.com/512/414/414968.png")
+            //снег
+            "snow" -> loadImageWeather("https://cdn-icons-png.flaticon.com/512/414/414968.png")
+            //снегопад
+            "snow-showers" -> loadImageWeather("https://cdn-icons-png.flaticon.com/512/414/414968.png")
+            //град
+            "hail" -> loadImageWeather("https://cdn-icons-png.flaticon.com/512/3496/3496239.png")
+            //гроза
+            "thunderstorm" -> loadImageWeather("https://cdn-icons-png.flaticon.com/512/3436/3436159.png")
+            //дождь с грозой
+            "thunderstorm-with-rain" -> loadImageWeather("https://cdn-icons-png.flaticon.com/512/3436/3436159.png")
+            //гроза с градом
+            "thunderstorm-with-hail" -> loadImageWeather("https://cdn-icons-png.flaticon.com/512/3436/3436159.png")
+            else -> {
+                loadImageWeather("https://cdn-icons-png.flaticon.com/512/821/821924.png")
+            }
+        }
+
+    }
+
+    private fun loadImageWeather(link: String){
+        binding.imageView.load(link)
+    }
+
 
 }
