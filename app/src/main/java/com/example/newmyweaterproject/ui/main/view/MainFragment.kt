@@ -1,6 +1,7 @@
 package com.example.newmyweaterproject.ui.main.view
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,8 @@ import com.example.newmyweaterproject.ui.main.viewmodel.AppState
 import com.example.newmyweaterproject.ui.main.viewmodel.MainViewModel
 
 class MainFragment : Fragment() {
+
+    private val IS_WORLD_KEY = "LIST_OF_TOWNS_KEY"
 
     companion object {
         fun newInstance() = MainFragment()
@@ -31,7 +34,6 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         //Изменяем для binding
         val view = inflater.inflate(R.layout.main_fragment, container, false)
         _binding = MainFragmentBinding.bind(view)
@@ -70,12 +72,38 @@ class MainFragment : Fragment() {
                 with(binding) {
                     if (isRus) {
                         mainFragmentFab.setImageResource(R.drawable.ic_russia)
+                        saveListOfTowns(false)
                     } else {
                         mainFragmentFab.setImageResource(R.drawable.ic_world)
+                        saveListOfTowns(true)
                     }
                 }
                 getWeatherFromLocalSource()
             })
+        }
+        showListOfTowns()
+    }
+
+    //Передаём в метод значение False или True. Если True будет выводиться список World
+    private fun saveListOfTowns(isDataSetWorld: Boolean) {
+        activity?.let {
+            with(it.getPreferences(Context.MODE_PRIVATE).edit()) {
+                putBoolean(IS_WORLD_KEY, isDataSetWorld)
+                apply()
+            }
+        }
+    }
+
+    //Получаем значание из настроек выбранного списка городов в предыдущем использовании
+    private fun showListOfTowns() {
+        activity?.let {
+            //читаем настройки из файла если настроек нет возвращаем FALSE, или значение равно False
+            if (it.getPreferences(Context.MODE_PRIVATE).getBoolean(IS_WORLD_KEY, false)) {
+                viewModel.onLanguageDefaultLoading(false)
+            //Иначе запускаем метод в соответствии с нашей настройкой
+            } else {
+                viewModel.onLanguageDefaultLoading(true)
+            }
         }
     }
 

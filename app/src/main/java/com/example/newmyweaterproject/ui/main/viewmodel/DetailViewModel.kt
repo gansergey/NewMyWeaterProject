@@ -5,6 +5,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.newmyweaterproject.ui.main.model.*
+import com.example.newmyweaterproject.ui.main.model.database.HistoryEntity
+import com.example.newmyweaterproject.ui.main.view.App
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -12,6 +14,8 @@ import java.text.ParseException
 
 class DetailViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: DetailsRepository = DetailRepositoryImpl(RemoteDataSource())
+    private val localRepository: LocalRepository = LocalRepositoryImpl(App.getHistoryDao())
+
     private val detailsLiveData = MutableLiveData<AppState>()
 
     val liveData: LiveData<AppState> = detailsLiveData
@@ -58,5 +62,16 @@ class DetailViewModel(application: Application) : AndroidViewModel(application) 
         } else {
             AppState.Error(ParseException("Невозможно распартить Json", 0))
         }
+    }
+
+    fun saveWeather(weather: Weather){
+        localRepository.saveEntity(
+            HistoryEntity(
+                id = 0,
+                city = weather.city.name,
+                temperature = weather.temperature,
+                condition =  weather.condition.toString()
+            )
+        )
     }
 }

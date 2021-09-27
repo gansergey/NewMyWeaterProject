@@ -13,7 +13,6 @@ import coil.api.load
 import com.example.newmyweaterproject.R
 import com.example.newmyweaterproject.databinding.FragmentDetailBinding
 import com.example.newmyweaterproject.ui.main.model.Weather
-import com.example.newmyweaterproject.ui.main.model.WeatherDTO
 import com.example.newmyweaterproject.ui.main.viewmodel.AppState
 import com.example.newmyweaterproject.ui.main.viewmodel.DetailViewModel
 
@@ -65,6 +64,9 @@ class DetailsFragment : Fragment() {
             is AppState.Loading -> binding.loadingLayout.showOrHide(true)
             is AppState.Success -> {
                 val weather = state.weather.first()
+
+                viewModel.saveWeather(weather)
+
                 with(binding) {
                     loadingLayout.showOrHide(false)
 
@@ -102,8 +104,7 @@ class DetailsFragment : Fragment() {
         _binding = null
     }
 
-    private fun getImageWeather(condition: String){
-
+    private fun getImageWeather(condition: String) {
         when (condition) {
             //ясно
             "clear" -> loadImageWeather("https://cdn-icons-png.flaticon.com/512/890/890347.png")
@@ -150,9 +151,7 @@ class DetailsFragment : Fragment() {
 
     }
 
-    private fun loadImageWeather(link: String){
+    private fun loadImageWeather(link: String) {
         binding.imageView.load(link)
     }
-
-
 }
