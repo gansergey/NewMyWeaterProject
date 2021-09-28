@@ -6,4 +6,9 @@
         android:icon="@android:drawable/ic_menu_recent_history"
         android:title="@string/menu_title_history"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_contacts"
+        android:icon="@drawable/ic_baseline_perm_contact_calendar_24"
+        android:title="@string/menu_title_contacts"
+        app:showAsAction="ifRoom" />
 </menu>

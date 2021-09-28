@@ -8,4 +8,5 @@
     <dimen name="max_image_size_fub_button">56dp</dimen>
     <dimen name="img_weather_height">246dp</dimen>
     <dimen name="img_padding">12dp</dimen>
+    <dimen name="main_container_text_size">6sp</dimen>
 </resources>

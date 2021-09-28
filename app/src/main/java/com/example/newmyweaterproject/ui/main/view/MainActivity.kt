@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
 
         registerReceiver(receiver, IntentFilter(CONNECTIVITY_ACTION))
 
-
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, MainFragment.newInstance())
@@ -44,6 +43,16 @@ class MainActivity : AppCompatActivity() {
                 supportFragmentManager.apply {
                     beginTransaction()
                         .replace(R.id.container, HistoryFragment())
+                        .addToBackStack("")
+                        .commitAllowingStateLoss()
+                }
+                true
+            }
+
+            R.id.menu_contacts -> {
+                supportFragmentManager.apply {
+                    beginTransaction()
+                        .replace(R.id.container, ContactsFragment())
                         .addToBackStack("")
                         .commitAllowingStateLoss()
                 }
