@@ -11,4 +11,15 @@
         android:icon="@drawable/ic_baseline_perm_contact_calendar_24"
         android:title="@string/menu_title_contacts"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_location"
+        android:icon="@drawable/ic_baseline_add_location_24"
+        android:title="@string/menu_title_location"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_location_map"
+        android:icon="@drawable/ic_baseline_map_24"
+        android:title="@string/menu_title_location_map"
+        app:showAsAction="ifRoom" />
 </menu>

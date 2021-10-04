@@ -17,4 +17,10 @@
     <string name="menu_title_history">История</string>
     <string name="menu_title_contacts">menu_title_contacts</string>
     <string name="warning_permission">Вы не выдали разрешение</string>
+    <string name="warning_gps_location">Не можем определить координы спутника. Включите GPS</string>
+    <string name="menu_title_location">Локация</string>
+    <string name="menu_title_location_map">Карты</string>
+    <string name="default_address">Red Square, 1, Moscow</string>
+    <string name="button_search_map">Search</string>
+    <string name="marker_start">Start</string>
 </resources>
