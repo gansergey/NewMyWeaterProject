@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="tv_padding">8dp</dimen>
+    <dimen name="tv_big_title">36sp</dimen>
+    <dimen name="tv_small_title">18sp</dimen>
+    <dimen name="tv_item_recycler_view_padding">18dp</dimen>
+    <dimen name="margin_fab_button">16dp</dimen>
+    <dimen name="max_image_size_fub_button">56dp</dimen>
+    <dimen name="img_weather_height">246dp</dimen>
+    <dimen name="img_padding">12dp</dimen>
+    <dimen name="main_container_text_size">6sp</dimen>
+</resources>
