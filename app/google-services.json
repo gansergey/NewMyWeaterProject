@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "980836232451",
+    "project_id": "newmyweaterproject",
+    "storage_bucket": "newmyweaterproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:980836232451:android:20be2f7cc8ec3230c00d36",
+        "android_client_info": {
+          "package_name": "com.example.newmyweaterproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "980836232451-gg3ael1h5jop8ukpu0st8bj3gjr3pdbt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8TwtIvBj1xdq_6YxjZkXezMENUc93MB8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "980836232451-gg3ael1h5jop8ukpu0st8bj3gjr3pdbt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
